@@ -1,0 +1,1 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/1y06mlwvun8k3he2?svg=true)](https://ci.appveyor.com/project/Sidenov/patternsz2)
