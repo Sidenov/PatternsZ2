@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "io.freefair.lombok" version "6.4.3"
 }
 
 group 'ru.netology'
@@ -17,6 +18,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.projectlombok:lombok:1.18.20'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.6.1'
     testImplementation 'com.codeborne:selenide:5.19.0'
     testImplementation 'com.github.javafaker:javafaker:1.0.2'

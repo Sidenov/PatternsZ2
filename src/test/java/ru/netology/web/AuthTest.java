@@ -1,31 +1,75 @@
 package ru.netology.web;
 
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.filter.log.LogDetail;
-import io.restassured.http.ContentType;
-import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.BeforeAll;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
 
-import static io.restassured.RestAssured.given;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static ru.netology.web.DataGenerator.Registration.getRegisteredUser;
+import static ru.netology.web.DataGenerator.generateLogin;
 
 public class AuthTest {
-    private static RequestSpecification requestSpec = new RequestSpecBuilder()
-            .setBaseUri("http://localhost")
-            .setPort(9999)
-            .setAccept(ContentType.JSON)
-            .setContentType(ContentType.JSON)
-            .log(LogDetail.ALL)
-            .build();
 
-    @BeforeAll
-    static void setUpAll() {
-        // сам запрос
-        given() // "дано"
-                .spec(requestSpec) // указываем, какую спецификацию используем
-                .body(new RegistrationDto("vasya", "password", "active")) // передаём в теле объект, который будет преобразован в JSON
-                .when() // "когда"
-                .post("/api/system/users") // на какой путь, относительно BaseUri отправляем запрос
-                .then() // "тогда ожидаем"
-                .statusCode(200); // код 200 OK
+    @Test
+    @DisplayName("Пользователь active, валидные логин и пароль")
+    void shouldSuccessLoginIfUserAreActive() {
+
+        Configuration.holdBrowserOpen = true;
+        open("http://localhost:9999");
+
+        var registeredUser = getRegisteredUser("active");
+        $("[data-test-id=login] input").setValue(registeredUser.getLogin());
+        $("[data-test-id=password] input").setValue(registeredUser.getPassword());
+        $x("//*[text()=\"Продолжить\"]").click();
+        $(".heading.heading_size_l.heading_theme_alfa-on-white").shouldHave(Condition.text("Личный кабинет"));
     }
+
+    @Test
+    @DisplayName("Пользователь blocked, валидные логин и пароль")
+    void shouldUnSuccessLoginIfUserAreBlocked() {
+
+        Configuration.holdBrowserOpen = true;
+        open("http://localhost:9999");
+
+        var registeredUser = getRegisteredUser("blocked");
+        $("[data-test-id=login] input").setValue(registeredUser.getLogin());
+        $("[data-test-id=password] input").setValue(registeredUser.getPassword());
+        $x("//*[text()=\"Продолжить\"]").click();
+        $("[data-test-id=error-notification]").shouldHave(Condition.text("Ошибка" +
+                " Ошибка! Пользователь заблокирован"));
+    }
+
+    @Test
+    @DisplayName("Пользователь active, ввод невалидного логина")
+    void shouldUnSuccessLoginIfUseInvalidLogin() {
+
+        Configuration.holdBrowserOpen = true;
+        open("http://localhost:9999");
+
+        var registeredUser = getRegisteredUser("blocked");
+        $("[data-test-id=login] input").setValue(generateLogin());
+        $("[data-test-id=password] input").setValue(registeredUser.getPassword());
+        $x("//*[text()=\"Продолжить\"]").click();
+        $("[data-test-id=error-notification]").shouldHave(Condition.text("Ошибка" +
+                " Ошибка! Неверно указан логин или пароль"));
+    }
+
+    @Test
+    @DisplayName("Пользователь active, ввод невалидного пароля")
+    void shouldUnSuccessLoginIfUseInvalidPassword() {
+
+        Configuration.holdBrowserOpen = true;
+        open("http://localhost:9999");
+
+        var registeredUser = getRegisteredUser("blocked");
+        $("[data-test-id=login] input").setValue(generateLogin());
+        $("[data-test-id=password] input").setValue(registeredUser.getPassword());
+        $x("//*[text()=\"Продолжить\"]").click();
+        $("[data-test-id=error-notification]").shouldHave(Condition.text("Ошибка" +
+                " Ошибка! Неверно указан логин или пароль"));
+    }
+
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.netology.web.AuthTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-06-04T16:19:47" hostname="DESKTOP-7CIKHCE" time="6.895">
+  <properties/>
+  <testcase name="Пользователь active, ввод невалидного пароля" classname="ru.netology.web.AuthTest" time="6.895"/>
+  <system-out><![CDATA[Request method:	POST
+Request URI:	http://localhost:9999/api/system/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Accept=application/json, application/javascript, text/javascript, text/json
+				Content-Type=application/json; charset=UTF-8
+Cookies:		<none>
+Multiparts:		<none>
+Body:
+{
+    "login": "Samara",
+    "password": "560dzx3b",
+    "status": "blocked"
+}
+]]></system-out>
+  <system-err><![CDATA[SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Starting ChromeDriver 102.0.5005.61 (0e59bcc00cc4985ce39ad31c150065f159d95ad3-refs/branch-heads/5005@{#819}) on port 32000
+Only local connections are allowed.
+Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
+ChromeDriver was started successfully.
+июн. 05, 2022 12:19:49 AM org.openqa.selenium.remote.ProtocolHandshake createSession
+INFO: Detected dialect: W3C
+]]></system-err>
+</testsuite>
